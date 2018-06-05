@@ -125,18 +125,108 @@ console.log(a)
 
 ### String Templates
 
-```javascript
+#### Template Litarals
+
+> Template literals are string literals allowing embedded expressions. You can use multi-line strings and string interpolation features with them. They were called "template strings" in prior editions of the ES2015 specification.
+
+```js
 const name = 'Al'
 const output = `My name is: ${name}`
 console.log(output)
 // My name is: Al
 ```
 
-### Template Literals
-### Multi-line Strings
-### .repeat()
-### .padLeft()
-### .padRight()
+#### Tagged Templates
+
+```js
+const cool = function (strings, foo, bar, baz) {
+	console.log(strings, foo, bar, baz)
+	return 'Psych!'
+}
+
+const foo = 111
+const bar = 222
+const baz = 333
+
+const output = cool`One ${foo} two ${bar} three ${baz}.`
+
+console.log(output)
+// Psych!
+```
+
+```js
+const cool = function (str, foo, bar, baz) {
+	console.log(strings, foo, bar, baz)
+	return str[0] + foo + str[1] + bar + str[2] + baz + str[3]
+}
+
+const foo = 111
+const bar = 222
+const baz = 333
+
+const output = cool`One ${foo} two ${bar} three ${baz}!`
+
+console.log(output)
+// One 111 two 222 three 333!
+```
+
+#### Multi-line Strings
+
+```js
+console.log(`
+This
+is
+valid!
+`)
+// 
+// This
+// is
+// valid!
+
+// ... aka ...
+
+// \nThis\nis\nvalid!
+```
+
+### String Methods
+
+#### .repeat()
+
+```js
+const val = 'Foo'
+console.log(val.repeat(10))
+// FooFooFooFooFooFooFooFooFooFoo
+```
+
+#### .padStart()
+
+```js
+const val = 'Foo'
+const pattern = '123456789'
+console.log(val.padStart(4, pattern))
+// 1Foo
+console.log(val.padStart(8, pattern))
+// 1234Foo
+console.log(pattern)
+```
+
+#### .padEnd()
+
+```js
+const val = 'Foo'
+const pattern = '123456789'
+console.log(val.padEnd(4, pattern))
+// 1Foo
+console.log(val.padEnd(8, pattern))
+// 1234Foo
+console.log(pattern)
+```
+
+## Destructuring
+
+### Objects
+### Arrays
+
 
 ## Object Oriented Programming
 
@@ -146,20 +236,201 @@ console.log(output)
 #### Lexical Context (this)
 #### Prototype Chaining
 
-### Class
-#### .constructor()
-#### Lexical Context (this)
-#### methods
-#### properties
-#### extends()
-#### super()
+### Classes
 
-### The Module Pattern
-#### An Alternative to Classes
+#### Instantiation (new)
+
+```js
+class Dog {}
+const buddy = new Dog()
+console.log(buddy)
+```
+
+#### Class Methods
+
+```js
+class Dog {
+	bark () {
+		console.log('woof')
+	}
+}
+const buddy = new Dog()
+buddy.bark()
+```
+
+#### constructor()
+
+```js
+class Dog {
+	constructor (name) {
+		this.name = name
+	}
+
+	bark () {
+		console.log(`Woof, my name is ${this.name}!`)
+	}
+}
+const buddy = new Dog('Buddy')
+const bella = new Dog('Bella')
+buddy.bark()
+bella.bark()
+```
+
+#### Inheritance & Polymorphism
+
+- Extends()
+- Super()
+
+```js
+class Dog {
+	constructor (name) {
+		this.name = name
+	}
+
+	bark () {
+		console.log(`Woof, my name is ${this.name}!`)
+	}
+}
+
+class SuperDog extends Dog{
+	constructor(name) {
+		// Inheritance
+		super(name)
+	}
+
+	// Polymorphism
+	fly () {
+		console.log('I\'m flying!')
+	}
+}
+
+const buddy = new Dog('Buddy')
+const bella = new SuperDog('Bella')
+buddy.bark()
+bella.bark()
+bella.fly()
+// buddy.fly()
+// TypeError: buddy.fly is not a function
+```
+
+### Lexical Scope (this)
+
+The context of `this` inside `foo.log` is `foo`.
+
+```js
+const foo = {
+	bar: 123,
+	log: function () {
+		console.log(this.bar)
+	}
+}
+
+foo.log()
+// 123
+```
+
+
+The context of `this` inside `inner` is `Window`.
+
+```js
+const foo = {
+	bar: 123,
+	log: function () {
+		const inner = function () {
+			console.log(`bar = ${this.bar}`)
+			console.log(this)
+		}
+
+		inner()
+	}
+}
+
+foo.log()
+// bar = undefined
+```
+
+The context of `this` inside `inner` is `foo`.
+
+```js
+const foo = {
+	bar: 123,
+	log: function () {
+		const inner = function () {
+			console.log(this.bar)
+		}
+
+		inner.call(this)
+	}
+}
+
+foo.log()
+// 123
+```
+
+
+### Closures
+
+> “A closure is a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.”
+>
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+```js
+(function iAmEnclosed() {
+ 	const a = 1   
+}());
+
+// ReferenceError: a is not defined
+console.log(a)
+```
+
+### The Module pattern
+
+```js
+const createDog = function dogClosure (name) {
+	const secret = 'I hate squirrels!'
+
+	const dog = {
+		name,
+		
+		bark: function () {
+			console.log(`Woof, my name is ${dog.name}!`)
+		},
+
+		tellSecret: function () {
+			console.log(secret)
+		}
+	}
+
+	return dog
+}
+
+const buddy = createDog('Buddy')
+buddy.bark()
+// Woof, my name is Buddy!
+
+console.log(buddy.secret)
+// undefined
+
+buddy.tellSecret()
+// I hate squirrels!
+```
 
 ## Functions
 
 ### Arrow Functions
+
+```js
+function a () {
+	console.log('Hi!')
+}
+```
+
+```js
+const a = () => {
+	console.log('Hi!')
+}
+```
+
 #### Auto Return
 ##### Currying Example 
 #### Optional Parens
@@ -174,6 +445,23 @@ console.log(output)
 ### Spread & Rest
 	 ...spread
 	 ...rest
+
+
+```js
+const myTag = (strs, ...vals) => vals.map((val, i) => {
+	return strs[i] + val
+}).concat(strs[strs.length - 1]).join('')
+
+const foo = 111
+const bar = 222
+const baz = 333
+
+const output = myTag`One ${foo} two ${bar} three ${baz}!`
+console.log(output)
+// One 111 two 222 three 333!
+````
+
+Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
 
 ## Flow Control
 
