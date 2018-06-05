@@ -601,10 +601,51 @@ console.log(result);
 // 4
 ```
 
-### Spread & Rest
+### Rest & Spread
 
-     ...spread
-     ...rest
+#### Rest
+
+```js
+// You need parentheses with arrow functions and the rest operator
+const adder = (start, ...vals) => {
+	let result = start
+
+	vals.forEach(val => {
+		result += val
+	})
+	return result
+}
+
+const start = 1
+const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512);
+console.log(result);
+// 1024
+```
+
+#### Spread
+
+```js
+// You need parentheses with arrow functions and the rest operator
+const adder = (start, ...vals) => {
+	let result = start
+
+	vals.forEach(val => {
+		result += val
+	})
+	return result
+}
+
+const start = 1
+const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+const result = adder(start, ...values);
+console.log(result);
+// 1024
+```
+
+
+
+
+
 
 ```js
 const myTag = (strs, ...vals) =>
