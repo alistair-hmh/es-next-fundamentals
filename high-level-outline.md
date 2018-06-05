@@ -1,0 +1,8 @@
+- Strings: Templates, Methods
+- Functions :Arrow Functions, Default Parameter Values, Spread & Rest Operators
+- Object Oriented Programming: Prototypes, Classes, The Module Pattern, Lexical Context
+- Flow Control: Promises, Async & Await, Generators & Iterators
+- Immutability: Why Immutability?, Primitives, Non Primitives, Object Assignment
+- Object Methods: assign, values, keys, entries, freeze, seal
+- Arrays Methods: filter, every, includes, some, from, of, forEach, copyWithin, fill, find, findIndex
+- Meta Programming: Reflect, Proxy
