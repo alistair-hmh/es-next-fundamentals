@@ -332,6 +332,247 @@ const coords = [0, 1, 0]
 rotate(coords)
 ```
 
+## Arrow Functions
+
+```js
+const log = msg => {
+	console.log(msg)
+}
+log('Hi!')
+```
+
+#### Auto Return
+
+```js
+const log = msg => console.log(msg)
+log('Hi!')
+```
+
+#### Optional Parens
+
+```js
+const log = msg => console.log(msg)
+log('Hi!')
+```
+
+#### Currying Without Arrow Functions
+
+```js
+function curry(a) {
+	return function(b) {
+		return function(c) {
+			return function(d) {
+				return a + b + c + d
+			}
+		}
+	}
+}
+
+console.log(curry(1)(2)(3)(4))
+// Logs 10
+```
+
+#### Currying With Arrow Functions
+
+```js
+// Currying with Arrow Functions
+const curry = a => b => c => d => {
+	return a + b + c + d
+}
+
+console.log(curry(1)(2)(3)(4))
+// Logs 10
+```
+
+#### Promises w/wo Arrow Functions
+
+Promises **without** arrow functions:
+
+```js
+function getData(url) {
+	return new Promise(function(resolve) {
+		return fetch(url).then(function(response) {
+			resolve(response.json())
+		})
+	})
+}
+
+getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
+	console.log(data)
+)
+```
+
+Promises **with** arrow functions:
+
+```js
+const getData = url =>
+	new Promise(resolve =>
+		fetch(url).then(response => resolve(response.json()))
+	)
+
+getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
+	console.log(data)
+)
+```
+
+```js
+(async () {
+	const getData = async url => JSON.parse((await fetch(url)).data)
+	const data = await getData('https://jsonplaceholder.typicode.com/posts/1')
+	console.log(data)
+})()
+```
+
+### Lexical Context (this)
+
+```js
+const createDog = function dogClosure(name) {
+	const secret = 'I hate squirrels!'
+
+	const dog = {
+		name,
+
+		bark: () => {
+			// OOPS!
+			console.log(`Woof, my name is ${this.name}!`)
+		},
+
+		tellSecret: function() {
+			console.log(secret)
+		}
+	}
+
+	return dog
+}
+
+const buddy = createDog('Buddy')
+buddy.bark()
+// undefined
+```
+
+## Default Parameter Values
+
+```js
+const adder = (a, b) => {
+	return a + b
+}
+
+const result = adder(2, 2)
+console.log(result)
+// 4
+```
+
+```js
+const adder = (a, b) => {
+	return a + b
+}
+
+const result = adder()
+console.log(result)
+// NaN
+```
+
+```js
+const adder = (a, b) => {
+	a = a || 2
+	b = b || 2
+	return a + b
+}
+
+const result = adder()
+console.log(result)
+// 4
+```
+
+```js
+const adder = (a = 2, b = 2) => {
+	return a + b
+}
+
+const result = adder()
+console.log(result)
+// 4
+```
+
+## Rest & Spread
+
+### Rest
+
+```js
+// You need parentheses with arrow functions and the rest operator
+const adder = (start, ...vals) => {
+	let result = start
+
+	vals.forEach(val => {
+		result += val
+	})
+	return result
+}
+
+const start = 1
+const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512)
+console.log(result)
+// 1024
+```
+
+### Spread
+
+```js
+// You need parentheses with arrow functions and the rest operator
+const adder = (start, ...vals) => {
+	let result = start
+
+	vals.forEach(val => {
+		result += val
+	})
+	return result
+}
+
+const start = 1
+const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+const result = adder(start, ...values)
+console.log(result)
+// 1024
+```
+
+```js
+const vals = [2, 3, 4]
+var a = [1, ...vals, 5]
+console.log(a)
+// [1, 2, 3, 4, 5]
+```
+
+```js
+const myTag = (strs, ...vals) =>
+	vals
+		.map((val, i) => {
+			return strs[i] + val
+		})
+		.concat(strs[strs.length - 1])
+		.join('')
+
+const foo = 111
+const bar = 222
+const baz = 333
+
+const output = myTag`One ${foo} two ${bar} three ${baz}!`
+console.log(output)
+// One 111 two 222 three 333!
+```
+
+Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
+
+```jsx
+class Greeting extends React.Component {
+	render() {
+		console.log(this.props)
+		return <h1 {...props}>Hello</h1>
+	}
+}
+```
+
+
+
 ## Object Oriented Programming
 
 ### Prototypes
@@ -574,283 +815,148 @@ buddy.tellSecret()
 // I hate squirrels!
 ```
 
-## Functions
-
-### Ye Olde Functions
-
-#### Function Declaration
-
-```js
-function log(msg) {
-	console.log(msg)
-}
-log('Hi!')
-```
-
-#### Function Expression
-
-```js
-var log = function log(msg) {
-	console.log(msg)
-}
-log('Hi!')
-```
-
-### Arrow Functions
-
-```js
-const log = msg => {
-	console.log(msg)
-}
-log('Hi!')
-```
-
-#### Auto Return
-
-```js
-const log = msg => console.log(msg)
-log('Hi!')
-```
-
-#### Optional Parens
-
-```js
-const log = msg => console.log(msg)
-log('Hi!')
-```
-
-#### Currying Without Arrow Functions
-
-```js
-function curry(a) {
-	return function(b) {
-		return function(c) {
-			return function(d) {
-				return a + b + c + d
-			}
-		}
-	}
-}
-
-console.log(curry(1)(2)(3)(4))
-// Logs 10
-```
-
-#### Currying With Arrow Functions
-
-```js
-// Currying with Arrow Functions
-const curry = a => b => c => d => {
-	return a + b + c + d
-}
-
-console.log(curry(1)(2)(3)(4))
-// Logs 10
-```
-
-#### Promises w/wo Arrow Functions
-
-Promises **without** arrow functions:
-
-```js
-function getData(url) {
-	return new Promise(function(resolve) {
-		return fetch(url).then(function(response) {
-			const data = response.json()
-			resolve(data)
-		})
-	})
-}
-
-getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
-	console.log(data)
-)
-```
-
-Promises **with** arrow functions:
-
-```js
-const getData = url =>
-	new Promise(resolve =>
-		fetch(url).then(response => resolve(response.json()))
-	)
-
-getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
-	console.log(data)
-)
-```
-
-```js
-(async () {
-	const getData = async url => JSON.parse((await fetch(url)).data)
-	const data = await getData('https://jsonplaceholder.typicode.com/posts/1')
-	console.log(data)
-})()
-```
-
-#### Lexical Context (this)
-
-```js
-const createDog = function dogClosure(name) {
-	const secret = 'I hate squirrels!'
-
-	const dog = {
-		name,
-
-		bark: () => {
-			// OOPS!
-			console.log(`Woof, my name is ${this.name}!`)
-		},
-
-		tellSecret: function() {
-			console.log(secret)
-		}
-	}
-
-	return dog
-}
-
-const buddy = createDog('Buddy')
-buddy.bark()
-// undefined
-```
-
-### Default Parameter Values
-
-```js
-const adder = (a, b) => {
-	return a + b
-}
-
-const result = adder(2, 2)
-console.log(result)
-// 4
-```
-
-```js
-const adder = (a, b) => {
-	return a + b
-}
-
-const result = adder()
-console.log(result)
-// NaN
-```
-
-```js
-const adder = (a, b) => {
-	a = a || 2
-	b = b || 2
-	return a + b
-}
-
-const result = adder()
-console.log(result)
-// 4
-```
-
-```js
-const adder = (a = 2, b = 2) => {
-	return a + b
-}
-
-const result = adder()
-console.log(result)
-// 4
-```
-
-### Rest & Spread
-
-#### Rest
-
-```js
-// You need parentheses with arrow functions and the rest operator
-const adder = (start, ...vals) => {
-	let result = start
-
-	vals.forEach(val => {
-		result += val
-	})
-	return result
-}
-
-const start = 1
-const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512)
-console.log(result)
-// 1024
-```
-
-#### Spread
-
-```js
-// You need parentheses with arrow functions and the rest operator
-const adder = (start, ...vals) => {
-	let result = start
-
-	vals.forEach(val => {
-		result += val
-	})
-	return result
-}
-
-const start = 1
-const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
-const result = adder(start, ...values)
-console.log(result)
-// 1024
-```
-
-```js
-const vals = [2, 3, 4]
-var a = [1, ...vals, 5]
-console.log(a)
-// [1, 2, 3, 4, 5]
-```
-
-```js
-const myTag = (strs, ...vals) =>
-	vals
-		.map((val, i) => {
-			return strs[i] + val
-		})
-		.concat(strs[strs.length - 1])
-		.join('')
-
-const foo = 111
-const bar = 222
-const baz = 333
-
-const output = myTag`One ${foo} two ${bar} three ${baz}!`
-console.log(output)
-// One 111 two 222 three 333!
-```
-
-Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
-
-```jsx
-class Greeting extends React.Component {
-	render() {
-		console.log(this.props)
-		return <h1 {...props}>Hello</h1>
-	}
-}
-```
 
 ## Flow Control
 
 ### Promises
 
-#### resolve(result)
+```js
+const myPromise = () => new Promise((resolve, reject) => {
+	setTimeout(() => {
+		resolve('Hi!')
+	}, 1000)
+})
 
-#### reject(err)
-
-#### .all(promises)
-
-#### .race()
+myPromise().then(result => {
+	console.log(result)
+})
+// Promise {<pending>}
+// Hi!
+```
 
 #### .catch(err)
 
+```js
+const myPromise = () => new Promise((resolve, reject) => {
+	setTimeout(() => {
+		//resolve('Hi!')
+		reject('Oops!')
+	}, 1000)
+})
+
+myPromise().then(result => {
+	console.log(result)
+}).catch(err => {
+	console.error(err)
+})
+// Promise {<pending>}
+// Error: Oops!
+```
+
 #### .finally()
+
+```js
+const tryToFlipHeads = () => new Promise((resolve, reject) => {
+	const rnd = Math.round(Math.random(1))
+	const result = rnd ? 'heads' : 'tails';
+	setTimeout(() => {
+		if (result === 'heads') {
+			resolve('HEADS! :)')	
+		} else {
+			reject('TAILS :(')
+		}
+	}, 1000)
+})
+
+tryToFlipHeads().then(result => {
+	console.log(result)
+}).catch(err => {
+	console.error(err)
+}).finally(status => {
+	console.log('DONE!')
+})
+// Promise {<pending>}
+// Heads! :)
+// ... or ...
+// Tails :(
+// DONE!
+```
+
+#### .all(promises)
+
+```js
+const fetch = require('node-fetch')
+
+const fetchAll = endpoints => new Promise((resolve, reject) => {
+	const promises = []
+
+	endpoints.forEach(endpoint => {
+		promises.push(fetch(endpoint))
+	})	
+
+	return Promise.all(promises).then(resolve).catch(reject)
+})
+
+const responseToJson = fetched => new Promise((resolve, reject) => {
+	const promises = []
+
+	fetched.forEach(data => {
+		promises.push(data.json())
+	})	
+
+	return Promise.all(promises).then(resolve).catch(reject)
+})
+
+const endpoints = [
+	'https://jsonplaceholder.typicode.com/posts/1',
+	'https://jsonplaceholder.typicode.com/posts/2',
+	'https://jsonplaceholder.typicode.com/posts/3',
+	'https://jsonplaceholder.typicode.com/posts/4',
+	'https://jsonplaceholder.typicode.com/posts/5'
+]
+
+fetchAll(endpoints)
+.then(responseToJson)
+.then(items => {
+	items.forEach((item, i) => {
+		console.log(`${i}: ${item.title}`)
+	})
+})
+// 0: sunt aut facere repellat provident occaecati excepturi optio reprehenderit
+// 1: qui est esse
+// 2: ea molestias quasi exercitationem repellat qui ipsa sit aut
+// 3: eum et est occaecati
+// 4: nesciunt quas odio
+```
+
+#### .race()
+
+```js
+const fetch = require('node-fetch')
+
+const fetchOne = endpoints => new Promise((resolve, reject) => {
+	const promises = []
+
+	endpoints.forEach(endpoint => {
+		promises.push(fetch(endpoint))
+	})	
+
+	return Promise.race(promises).then(resolve).catch(reject)
+})
+
+const endpoints = [
+	'https://jsonplaceholder.typicode.com/posts/1',
+	'https://jsonplaceholder.typicode.com/posts/2',
+	'https://jsonplaceholder.typicode.com/posts/3',
+	'https://jsonplaceholder.typicode.com/posts/4',
+	'https://jsonplaceholder.typicode.com/posts/5'
+]
+
+fetchOne(endpoints)
+.then(result => result.json())
+.then(json => console.log(json.title))
+// A different title is output each time
+```
 
 ### Async Await
 
