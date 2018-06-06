@@ -221,11 +221,81 @@ console.log(val.padEnd(8, pattern));
 console.log(pattern);
 ```
 
+## Object Literal Shorthand
+
+The old way
+
+```js
+const a = "foo";
+const b = "bar";
+const c = "baz";
+
+const obj = { a: a, b: b, c: c };
+console.log(obj);
+// {a: "foo", b: "bar", c: "baz"}
+```
+
+```js
+const a = "foo";
+const b = "bar";
+const c = "baz";
+
+const obj = { a, b, c };
+console.log(obj);
+// {a: "foo", b: "bar", c: "baz"}
+```
+
 ## Destructuring
 
-### Objects
+The old way
 
-### Arrays
+```js
+function rotate(props) {
+	var x = props.x;
+	var y = props.x;
+	var z = props.x;
+	var originX = props.origin.x;
+	var originY = props.origin.y;
+	var originZ = props.origin.z;
+
+	// ... apply transformation matrix
+}
+
+rotate({
+	x: 0,
+	y: 1,
+	z: 0,
+	origin: { 
+		x: 0,
+		y: 0
+	}
+});
+```
+
+The new way
+
+```js
+const rotate = props => {
+	let {x, y, z, origin: {x: originX, y: originY}} = props;
+	// ... apply transformation matrix
+}
+
+rotate({
+	x: 0,
+	y: 1,
+	z: 0,
+	origin: { 
+		x: 0,
+		y: 0
+	}
+});
+
+```
+
+
+### Destructuring Objects
+
+### Destructuring Arrays
 
 ## Object Oriented Programming
 
@@ -608,15 +678,15 @@ console.log(result);
 ```js
 // You need parentheses with arrow functions and the rest operator
 const adder = (start, ...vals) => {
-	let result = start
+	let result = start;
 
 	vals.forEach(val => {
-		result += val
-	})
-	return result
-}
+		result += val;
+	});
+	return result;
+};
 
-const start = 1
+const start = 1;
 const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512);
 console.log(result);
 // 1024
@@ -627,25 +697,27 @@ console.log(result);
 ```js
 // You need parentheses with arrow functions and the rest operator
 const adder = (start, ...vals) => {
-	let result = start
+	let result = start;
 
 	vals.forEach(val => {
-		result += val
-	})
-	return result
-}
+		result += val;
+	});
+	return result;
+};
 
-const start = 1
-const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+const start = 1;
+const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
 const result = adder(start, ...values);
 console.log(result);
 // 1024
 ```
 
-
-
-
-
+```js
+const vals = [2, 3, 4];
+var a = [1, ...vals, 5];
+console.log(a);
+// [1, 2, 3, 4, 5]
+```
 
 ```js
 const myTag = (strs, ...vals) =>
@@ -666,6 +738,15 @@ console.log(output);
 ```
 
 Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
+
+```jsx
+class Greeting extends React.Component {
+	render() {
+		console.log(this.props);
+		return <h1 {...props}>Hello</h1>;
+	}
+}
+```
 
 ## Flow Control
 
