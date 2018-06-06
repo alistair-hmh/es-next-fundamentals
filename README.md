@@ -247,6 +247,8 @@ console.log(obj);
 
 ## Destructuring
 
+### Destructuring Objects
+
 The old way
 
 ```js
@@ -289,25 +291,44 @@ rotate({
 		y: 0
 	}
 });
-
 ```
-
-
-### Destructuring Objects
 
 ### Destructuring Arrays
 
+```js
+const rotate = (...props) => {
+	let [x, y, z] = props
+}
+
+rotate(0, 1, 2);
+```
+
+### Destructuring Function Parameters
+
+```js
+const props = {x: 0, y: 1, z: 0}
+const rotate = (...props) => {
+	let [x, y, z] = props
+}
+
+rotate(0, 1, 2);
+```
+
+
+
+
 ## Object Oriented Programming
 
-### Prototype
+### Prototypes
 
-#### Constructor
+#### Prototype Constructor
 
-#### Properties
+#### Properties & Mehotds
 
 #### Lexical Context (this)
 
 #### Prototype Chaining
+
 
 ### Classes
 
