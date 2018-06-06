@@ -27,7 +27,13 @@
   },
   "homepage": "https://github.com/f1lt3r/js-next-fundamentals#readme",
   "dependencies": {
-    "co": "^4.6.0",
-    "node-fetch": "^2.1.2"
+    "co": "^4.6.0"
+  },
+  "xo": {
+    "esnext": true,
+    "semicolon": false,
+    "rules": {
+      "node/no-unpublished-bin": false
+    }
   }
 }

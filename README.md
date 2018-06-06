@@ -2,21 +2,21 @@
 
 > References notes for a short series of lectures on the latest ~JavaScript language features.
 
-*   **Strings:**
+-   **Strings:**
     Templates, Methods
-*   **Functions:**
+-   **Functions:**
     Arrow Functions, Default Parameter Values, Spread & Rest Operators
-*   **Object Oriented:**
+-   **Object Oriented:**
     Prototypes, Classes, The Module Pattern, Lexical Context
-*   **Flow Control:**
+-   **Flow Control:**
     Promises, Async & Await, Generators & Iterators
-*   **Immutability:**
+-   **Immutability:**
     Why Immutability?, Primitives, Non Primitives, Object Assignment
-*   **Objects:**
+-   **Objects:**
     assign, values, keys, entries, freeze, seal
-*   **Arrays:** filter, every, includes, some, from, of, forEach, copyWithin, fill, find, findIndex
-*   **Meta Programming:** Reflect, Proxy
-*   **React**: How ES Next syntax makes your React code cleaner and easier to manage.
+-   **Arrays:** filter, every, includes, some, from, of, forEach, copyWithin, fill, find, findIndex
+-   **Meta Programming:** Reflect, Proxy
+-   **React**: How ES Next syntax makes your React code cleaner and easier to manage.
 
 ## Table of Contents
 
@@ -24,10 +24,10 @@
 
 ## Identifiers
 
-*   Const - A constant never changes it's primitive value.
-*   Let - Let can be updated
-*   Block scoped - invisible outside of the scope in which they were assigned.
-*   Can't be re-assigned (referenced to another namespace)
+-   Const - A constant never changes it's primitive value.
+-   Let - Let can be updated
+-   Block scoped - invisible outside of the scope in which they were assigned.
+-   Can't be re-assigned (referenced to another namespace)
 
 ### const
 
@@ -35,24 +35,24 @@ A constant never changes it's primitive value.
 
 ```js
 // Const can re-reference Var
-const a = 2;
-a = 2;
+const a = 2
+a = 2
 // Uncaught TypeError: Assignment to constant variable.
 ```
 
 ```js
 // Const can re-reference Var
-var a = 1;
-const a = 2;
-console.log(a);
+var a = 1
+const a = 2
+console.log(a)
 ```
 
 ```js
 // Var cannot re-reference Const
-const a = 1;
-var a = 2;
+const a = 1
+var a = 2
 // ...or...
-a = 2;
+a = 2
 // SyntaxError: "Identifier 'a' has already been declared"
 // (Execution of your script will halt!)
 ```
@@ -72,10 +72,10 @@ Uncaught ReferenceError: a is not defined
 You can assign to a namespace that is also used in the parent block.
 
 ```js
-const a = 1;
+const a = 1
 {
-	const a = 2;
-	console.log(a);
+	const a = 2
+	console.log(a)
 }
 ```
 
@@ -84,17 +84,17 @@ const a = 1;
 Let can be updated.
 
 ```js
-let a = 1;
-a = 2;
-console.log(a);
+let a = 1
+a = 2
+console.log(a)
 // 2
 ```
 
 Let cannot be re-assigned.
 
 ```js
-let a = 1;
-let a = 2;
+let a = 1
+let a = 2
 // SyntaxError: Identifier 'a' has already been declared
 ```
 
@@ -102,10 +102,10 @@ let a = 2;
 
 ```js
 for (let i = 0; i < 10; i++) {
-	console.log(i);
+	console.log(i)
 }
 
-console.log(i);
+console.log(i)
 // ReferenceError: i is not defined
 ```
 
@@ -113,10 +113,10 @@ console.log(i);
 
 ```js
 if (true) {
-	const a = 1;
+	const a = 1
 }
-const a = 2;
-console.log(a);
+const a = 2
+console.log(a)
 // 2
 ```
 
@@ -129,9 +129,9 @@ console.log(a);
 > Template literals are string literals allowing embedded expressions. You can use multi-line strings and string interpolation features with them. They were called "template strings" in prior editions of the ES2015 specification.
 
 ```js
-const name = "Al";
-const output = `My name is: ${name}`;
-console.log(output);
+const name = 'Al'
+const output = `My name is: ${name}`
+console.log(output)
 // My name is: Al
 ```
 
@@ -139,33 +139,33 @@ console.log(output);
 
 ```js
 const cool = function(strings, foo, bar, baz) {
-	console.log(strings, foo, bar, baz);
-	return "Psych!";
-};
+	console.log(strings, foo, bar, baz)
+	return 'Psych!'
+}
 
-const foo = 111;
-const bar = 222;
-const baz = 333;
+const foo = 111
+const bar = 222
+const baz = 333
 
-const output = cool`One ${foo} two ${bar} three ${baz}.`;
+const output = cool`One ${foo} two ${bar} three ${baz}.`
 
-console.log(output);
+console.log(output)
 // Psych!
 ```
 
 ```js
 const cool = function(str, foo, bar, baz) {
-	console.log(strings, foo, bar, baz);
-	return str[0] + foo + str[1] + bar + str[2] + baz + str[3];
-};
+	console.log(strings, foo, bar, baz)
+	return str[0] + foo + str[1] + bar + str[2] + baz + str[3]
+}
 
-const foo = 111;
-const bar = 222;
-const baz = 333;
+const foo = 111
+const bar = 222
+const baz = 333
 
-const output = cool`One ${foo} two ${bar} three ${baz}!`;
+const output = cool`One ${foo} two ${bar} three ${baz}!`
 
-console.log(output);
+console.log(output)
 // One 111 two 222 three 333!
 ```
 
@@ -176,7 +176,7 @@ console.log(`
 This
 is
 valid!
-`);
+`)
 //
 // This
 // is
@@ -192,33 +192,33 @@ valid!
 #### .repeat()
 
 ```js
-const val = "Foo";
-console.log(val.repeat(10));
+const val = 'Foo'
+console.log(val.repeat(10))
 // FooFooFooFooFooFooFooFooFooFoo
 ```
 
 #### .padStart()
 
 ```js
-const val = "Foo";
-const pattern = "123456789";
-console.log(val.padStart(4, pattern));
+const val = 'Foo'
+const pattern = '123456789'
+console.log(val.padStart(4, pattern))
 // 1Foo
-console.log(val.padStart(8, pattern));
+console.log(val.padStart(8, pattern))
 // 1234Foo
-console.log(pattern);
+console.log(pattern)
 ```
 
 #### .padEnd()
 
 ```js
-const val = "Foo";
-const pattern = "123456789";
-console.log(val.padEnd(4, pattern));
+const val = 'Foo'
+const pattern = '123456789'
+console.log(val.padEnd(4, pattern))
 // 1Foo
-console.log(val.padEnd(8, pattern));
+console.log(val.padEnd(8, pattern))
 // 1234Foo
-console.log(pattern);
+console.log(pattern)
 ```
 
 ## Object Literal Shorthand
@@ -226,22 +226,22 @@ console.log(pattern);
 The old way
 
 ```js
-const a = "foo";
-const b = "bar";
-const c = "baz";
+const a = 'foo'
+const b = 'bar'
+const c = 'baz'
 
-const obj = { a: a, b: b, c: c };
-console.log(obj);
+const obj = {a: a, b: b, c: c}
+console.log(obj)
 // {a: "foo", b: "bar", c: "baz"}
 ```
 
 ```js
-const a = "foo";
-const b = "bar";
-const c = "baz";
+const a = 'foo'
+const b = 'bar'
+const c = 'baz'
 
-const obj = { a, b, c };
-console.log(obj);
+const obj = {a, b, c}
+console.log(obj)
 // {a: "foo", b: "bar", c: "baz"}
 ```
 
@@ -253,12 +253,12 @@ The old way
 
 ```js
 function rotate(props) {
-	var x = props.x;
-	var y = props.x;
-	var z = props.x;
-	var originX = props.origin.x;
-	var originY = props.origin.y;
-	var originZ = props.origin.z;
+	var x = props.x
+	var y = props.x
+	var z = props.x
+	var originX = props.origin.x
+	var originY = props.origin.y
+	var originZ = props.origin.z
 
 	// ... apply transformation matrix
 }
@@ -267,18 +267,23 @@ rotate({
 	x: 0,
 	y: 1,
 	z: 0,
-	origin: { 
+	origin: {
 		x: 0,
 		y: 0
 	}
-});
+})
 ```
 
 The new way
 
 ```js
 const rotate = props => {
-	let {x, y, z, origin: {x: originX, y: originY}} = props;
+	let {
+		x,
+		y,
+		z,
+		origin: {x: originX, y: originY}
+	} = props
 	// ... apply transformation matrix
 }
 
@@ -286,49 +291,111 @@ rotate({
 	x: 0,
 	y: 1,
 	z: 0,
-	origin: { 
+	origin: {
 		x: 0,
 		y: 0
 	}
-});
+})
 ```
 
 ### Destructuring Arrays
 
 ```js
-const rotate = (...props) => {
-	let [x, y, z] = props
+const rotate = coords => {
+	let [x, y, z] = coords
+	console.log(x, y, z)
 }
 
-rotate(0, 1, 2);
+const coords = [0, 1, 2]
+rotate(coords)
 ```
 
 ### Destructuring Function Parameters
 
 ```js
-const props = {x: 0, y: 1, z: 0}
-const rotate = (...props) => {
-	let [x, y, z] = props
+const rotate = ({x, y, z}) => {
+	console.log(x, y, z)
 }
 
-rotate(0, 1, 2);
+const coords = {x: 0, y: 1, z: 0}
+rotate(coords)
 ```
 
+Arrays
 
+```js
+const rotate = ([x, y, z]) => {
+	console.log(x, y, z)
+}
 
+const coords = [0, 1, 0]
+rotate(coords)
+```
 
 ## Object Oriented Programming
 
 ### Prototypes
 
+```js
+function Dog() {}
+console.log(Dog.prototype)
+```
+
 #### Prototype Constructor
+
+```js
+function Dog(name) {
+	this.name = name
+}
+const buddy = new Dog('Buddy')
+console.log(buddy)
+```
 
 #### Properties & Mehotds
 
-#### Lexical Context (this)
+```js
+function Dog(name) {
+	this.name = name
+}
+
+Dog.prototype.bark = function() {
+	console.log(`Woof, my name is ${this.name}!`)
+}
+
+const buddy = new Dog('Buddy')
+buddy.bark()
+// Woof, my name is Buddy!
+```
 
 #### Prototype Chaining
 
+```js
+function Dog(name) {
+	this.name = name
+}
+Dog.prototype.bark = function() {
+	console.log(`Woof, my name is ${this.name}!`)
+}
+
+function SuperDog(name) {
+	Dog.call(this, name)
+}
+SuperDog.prototype.fly = function() {
+	console.log("I'm flying!")
+}
+SuperDog.prototype.constructor = Dog
+SuperDog.prototype = new Dog()
+
+
+const buddy = new Dog('Buddy')
+const bella = new SuperDog('Bella')
+buddy.bark()
+// Woof, my name is Buddy!
+bella.bark()
+// Woof, my name is Bella!
+bella.fly()
+// I'm flying!
+```
 
 ### Classes
 
@@ -336,8 +403,8 @@ rotate(0, 1, 2);
 
 ```js
 class Dog {}
-const buddy = new Dog();
-console.log(buddy);
+const buddy = new Dog()
+console.log(buddy)
 ```
 
 #### Class Methods
@@ -345,11 +412,11 @@ console.log(buddy);
 ```js
 class Dog {
 	bark() {
-		console.log("woof");
+		console.log('woof')
 	}
 }
-const buddy = new Dog();
-buddy.bark();
+const buddy = new Dog()
+buddy.bark()
 ```
 
 #### constructor()
@@ -357,52 +424,52 @@ buddy.bark();
 ```js
 class Dog {
 	constructor(name) {
-		this.name = name;
+		this.name = name
 	}
 
 	bark() {
-		console.log(`Woof, my name is ${this.name}!`);
+		console.log(`Woof, my name is ${this.name}!`)
 	}
 }
-const buddy = new Dog("Buddy");
-const bella = new Dog("Bella");
-buddy.bark();
-bella.bark();
+const buddy = new Dog('Buddy')
+const bella = new Dog('Bella')
+buddy.bark()
+bella.bark()
 ```
 
 #### Inheritance & Polymorphism
 
-*   Extends()
-*   Super()
+-   Extends()
+-   Super()
 
 ```js
 class Dog {
 	constructor(name) {
-		this.name = name;
+		this.name = name
 	}
 
 	bark() {
-		console.log(`Woof, my name is ${this.name}!`);
+		console.log(`Woof, my name is ${this.name}!`)
 	}
 }
 
 class SuperDog extends Dog {
 	constructor(name) {
 		// Inheritance
-		super(name);
+		super(name)
 	}
 
 	// Polymorphism
 	fly() {
-		console.log("I'm flying!");
+		console.log("I'm flying!")
 	}
 }
 
-const buddy = new Dog("Buddy");
-const bella = new SuperDog("Bella");
-buddy.bark();
-bella.bark();
-bella.fly();
+const buddy = new Dog('Buddy')
+const bella = new SuperDog('Bella')
+buddy.bark()
+bella.bark()
+bella.fly()
 // buddy.fly()
 // TypeError: buddy.fly is not a function
 ```
@@ -415,11 +482,11 @@ The context of `this` inside `foo.log` is `foo`.
 const foo = {
 	bar: 123,
 	log: function() {
-		console.log(this.bar);
+		console.log(this.bar)
 	}
-};
+}
 
-foo.log();
+foo.log()
 // 123
 ```
 
@@ -430,15 +497,15 @@ const foo = {
 	bar: 123,
 	log: function() {
 		const inner = function() {
-			console.log(`bar = ${this.bar}`);
-			console.log(this);
-		};
+			console.log(`bar = ${this.bar}`)
+			console.log(this)
+		}
 
-		inner();
+		inner()
 	}
-};
+}
 
-foo.log();
+foo.log()
 // bar = undefined
 ```
 
@@ -449,14 +516,14 @@ const foo = {
 	bar: 123,
 	log: function() {
 		const inner = function() {
-			console.log(this.bar);
-		};
+			console.log(this.bar)
+		}
 
-		inner.call(this);
+		inner.call(this)
 	}
-};
+}
 
-foo.log();
+foo.log()
 // 123
 ```
 
@@ -467,43 +534,43 @@ foo.log();
 > https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
 ```js
-(function iAmEnclosed() {
-	const a = 1;
-})();
+;(function iAmEnclosed() {
+	const a = 1
+})()
 
 // ReferenceError: a is not defined
-console.log(a);
+console.log(a)
 ```
 
 ### The Module pattern
 
 ```js
 const createDog = function dogClosure(name) {
-	const secret = "I hate squirrels!";
+	const secret = 'I hate squirrels!'
 
 	const dog = {
 		name,
 
 		bark: function() {
-			console.log(`Woof, my name is ${this.name}!`);
+			console.log(`Woof, my name is ${this.name}!`)
 		},
 
 		tellSecret: function() {
-			console.log(secret);
+			console.log(secret)
 		}
-	};
+	}
 
-	return dog;
-};
+	return dog
+}
 
-const buddy = createDog("Buddy");
-buddy.bark();
+const buddy = createDog('Buddy')
+buddy.bark()
 // Woof, my name is Buddy!
 
-console.log(buddy.secret);
+console.log(buddy.secret)
 // undefined
 
-buddy.tellSecret();
+buddy.tellSecret()
 // I hate squirrels!
 ```
 
@@ -515,41 +582,41 @@ buddy.tellSecret();
 
 ```js
 function log(msg) {
-	console.log(msg);
+	console.log(msg)
 }
-log("Hi!");
+log('Hi!')
 ```
 
 #### Function Expression
 
 ```js
 var log = function log(msg) {
-	console.log(msg);
-};
-log("Hi!");
+	console.log(msg)
+}
+log('Hi!')
 ```
 
 ### Arrow Functions
 
 ```js
 const log = msg => {
-	console.log(msg);
-};
-log("Hi!");
+	console.log(msg)
+}
+log('Hi!')
 ```
 
 #### Auto Return
 
 ```js
-const log = msg => console.log(msg);
-log("Hi!");
+const log = msg => console.log(msg)
+log('Hi!')
 ```
 
 #### Optional Parens
 
 ```js
-const log = msg => console.log(msg);
-log("Hi!");
+const log = msg => console.log(msg)
+log('Hi!')
 ```
 
 #### Currying Without Arrow Functions
@@ -559,13 +626,13 @@ function curry(a) {
 	return function(b) {
 		return function(c) {
 			return function(d) {
-				return a + b + c + d;
-			};
-		};
-	};
+				return a + b + c + d
+			}
+		}
+	}
 }
 
-console.log(curry(1)(2)(3)(4));
+console.log(curry(1)(2)(3)(4))
 // Logs 10
 ```
 
@@ -574,10 +641,10 @@ console.log(curry(1)(2)(3)(4));
 ```js
 // Currying with Arrow Functions
 const curry = a => b => c => d => {
-	return a + b + c + d;
-};
+	return a + b + c + d
+}
 
-console.log(curry(1)(2)(3)(4));
+console.log(curry(1)(2)(3)(4))
 // Logs 10
 ```
 
@@ -589,15 +656,15 @@ Promises **without** arrow functions:
 function getData(url) {
 	return new Promise(function(resolve) {
 		return fetch(url).then(function(response) {
-			const data = response.json();
-			resolve(data);
-		});
-	});
+			const data = response.json()
+			resolve(data)
+		})
+	})
 }
 
-getData("https://jsonplaceholder.typicode.com/posts/1").then(data =>
+getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
 	console.log(data)
-);
+)
 ```
 
 Promises **with** arrow functions:
@@ -606,11 +673,11 @@ Promises **with** arrow functions:
 const getData = url =>
 	new Promise(resolve =>
 		fetch(url).then(response => resolve(response.json()))
-	);
+	)
 
-getData("https://jsonplaceholder.typicode.com/posts/1").then(data =>
+getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
 	console.log(data)
-);
+)
 ```
 
 ```js
@@ -625,26 +692,26 @@ getData("https://jsonplaceholder.typicode.com/posts/1").then(data =>
 
 ```js
 const createDog = function dogClosure(name) {
-	const secret = "I hate squirrels!";
+	const secret = 'I hate squirrels!'
 
 	const dog = {
 		name,
 
 		bark: () => {
 			// OOPS!
-			console.log(`Woof, my name is ${this.name}!`);
+			console.log(`Woof, my name is ${this.name}!`)
 		},
 
 		tellSecret: function() {
-			console.log(secret);
+			console.log(secret)
 		}
-	};
+	}
 
-	return dog;
-};
+	return dog
+}
 
-const buddy = createDog("Buddy");
-buddy.bark();
+const buddy = createDog('Buddy')
+buddy.bark()
 // undefined
 ```
 
@@ -652,43 +719,43 @@ buddy.bark();
 
 ```js
 const adder = (a, b) => {
-	return a + b;
-};
+	return a + b
+}
 
-const result = adder(2, 2);
-console.log(result);
+const result = adder(2, 2)
+console.log(result)
 // 4
 ```
 
 ```js
 const adder = (a, b) => {
-	return a + b;
-};
+	return a + b
+}
 
-const result = adder();
-console.log(result);
+const result = adder()
+console.log(result)
 // NaN
 ```
 
 ```js
 const adder = (a, b) => {
-	a = a || 2;
-	b = b || 2;
-	return a + b;
-};
+	a = a || 2
+	b = b || 2
+	return a + b
+}
 
-const result = adder();
-console.log(result);
+const result = adder()
+console.log(result)
 // 4
 ```
 
 ```js
 const adder = (a = 2, b = 2) => {
-	return a + b;
-};
+	return a + b
+}
 
-const result = adder();
-console.log(result);
+const result = adder()
+console.log(result)
 // 4
 ```
 
@@ -699,17 +766,17 @@ console.log(result);
 ```js
 // You need parentheses with arrow functions and the rest operator
 const adder = (start, ...vals) => {
-	let result = start;
+	let result = start
 
 	vals.forEach(val => {
-		result += val;
-	});
-	return result;
-};
+		result += val
+	})
+	return result
+}
 
-const start = 1;
-const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512);
-console.log(result);
+const start = 1
+const result = adder(start, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512)
+console.log(result)
 // 1024
 ```
 
@@ -718,25 +785,25 @@ console.log(result);
 ```js
 // You need parentheses with arrow functions and the rest operator
 const adder = (start, ...vals) => {
-	let result = start;
+	let result = start
 
 	vals.forEach(val => {
-		result += val;
-	});
-	return result;
-};
+		result += val
+	})
+	return result
+}
 
-const start = 1;
-const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
-const result = adder(start, ...values);
-console.log(result);
+const start = 1
+const values = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+const result = adder(start, ...values)
+console.log(result)
 // 1024
 ```
 
 ```js
-const vals = [2, 3, 4];
-var a = [1, ...vals, 5];
-console.log(a);
+const vals = [2, 3, 4]
+var a = [1, ...vals, 5]
+console.log(a)
 // [1, 2, 3, 4, 5]
 ```
 
@@ -744,17 +811,17 @@ console.log(a);
 const myTag = (strs, ...vals) =>
 	vals
 		.map((val, i) => {
-			return strs[i] + val;
+			return strs[i] + val
 		})
 		.concat(strs[strs.length - 1])
-		.join("");
+		.join('')
 
-const foo = 111;
-const bar = 222;
-const baz = 333;
+const foo = 111
+const bar = 222
+const baz = 333
 
-const output = myTag`One ${foo} two ${bar} three ${baz}!`;
-console.log(output);
+const output = myTag`One ${foo} two ${bar} three ${baz}!`
+console.log(output)
 // One 111 two 222 three 333!
 ```
 
@@ -763,8 +830,8 @@ Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
 ```jsx
 class Greeting extends React.Component {
 	render() {
-		console.log(this.props);
-		return <h1 {...props}>Hello</h1>;
+		console.log(this.props)
+		return <h1 {...props}>Hello</h1>
 	}
 }
 ```
