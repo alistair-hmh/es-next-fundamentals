@@ -1,3 +1,5 @@
+![ES Next Logo](assets/es-next.png)
+
 # ES Next Fundamentals
 
 > References notes for a short series of lectures on the latest ~JavaScript language features.
@@ -21,6 +23,8 @@
 ## Table of Contents
 
 [[TOC]]
+
+# Part 1 - The "Basics"
 
 ## Identifiers
 
@@ -571,18 +575,16 @@ class Greeting extends React.Component {
 }
 ```
 
+# Part 2 - Object Oriented Programming
 
-
-## Object Oriented Programming
-
-### Prototypes
+## Prototypes
 
 ```js
 function Dog() {}
 console.log(Dog.prototype)
 ```
 
-#### Prototype Constructor
+### Prototype Constructor
 
 ```js
 function Dog(name) {
@@ -592,7 +594,7 @@ const buddy = new Dog('Buddy')
 console.log(buddy)
 ```
 
-#### Properties & Mehotds
+### Properties & Mehotds
 
 ```js
 function Dog(name) {
@@ -608,7 +610,7 @@ buddy.bark()
 // Woof, my name is Buddy!
 ```
 
-#### Prototype Chaining
+### Prototype Chaining
 
 ```js
 function Dog(name) {
@@ -638,9 +640,9 @@ bella.fly()
 // I'm flying!
 ```
 
-### Classes
+## Classes
 
-#### Instantiation (new)
+### Instantiation (new)
 
 ```js
 class Dog {}
@@ -648,7 +650,7 @@ const buddy = new Dog()
 console.log(buddy)
 ```
 
-#### Class Methods
+### Class Methods
 
 ```js
 class Dog {
@@ -660,7 +662,7 @@ const buddy = new Dog()
 buddy.bark()
 ```
 
-#### constructor()
+### constructor()
 
 ```js
 class Dog {
@@ -678,7 +680,7 @@ buddy.bark()
 bella.bark()
 ```
 
-#### Inheritance & Polymorphism
+### Inheritance & Polymorphism
 
 -   Extends()
 -   Super()
@@ -715,7 +717,7 @@ bella.fly()
 // TypeError: buddy.fly is not a function
 ```
 
-### Lexical Scope (this)
+## Lexical Scope (this)
 
 The context of `this` inside `foo.log` is `foo`.
 
@@ -768,7 +770,7 @@ foo.log()
 // 123
 ```
 
-### Closures
+## Closures
 
 > “A closure is a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.”
 >
@@ -783,7 +785,7 @@ foo.log()
 console.log(a)
 ```
 
-### The Module pattern
+## The Module pattern
 
 ```js
 const createDog = function dogClosure(name) {
@@ -815,8 +817,59 @@ buddy.tellSecret()
 // I hate squirrels!
 ```
 
+# Part 3 - The Meta Bits
 
-## Flow Control
+## Immutability
+
+https://www.youtube.com/watch?v=9M-r8p9ey8U
+
+### JavaScript Primartives (Immutable)
+
+#### Number
+
+#### Boolean
+
+#### Etc
+
+### JavaScript Objects (Reference)
+
+#### Objects
+
+#### Arrays
+
+### Object.assign()
+
+## Meta-Programming
+
+> Metaprogramming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
+>
+> https://en.wikipedia.org/wiki/Metaprogramming
+
+> Starting with ECMAScript 2015, JavaScript gains support for the Proxy and Reflect objects allowing you to intercept and define custom behavior for fundamental language operations (e.g. property lookup, assignment, enumeration, function invocation, etc). With the help of these two objects you are able to program at the meta level of JavaScript.
+>
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Meta_programming
+
+### Reflect()
+
+#### .has(obj, 'propertyName')
+
+#### .ownKeys()
+
+#### .getPrototypeOf()
+
+### Proxy()
+
+#### Traps
+
+#### new Proxy(target, handler)
+
+#### handler
+
+##### .constsruct()
+
+##### .ownKeys()
+
+## Asynchronous Control Flow
 
 ### Promises
 
@@ -1026,6 +1079,22 @@ get(endpoints)
 
 #### yeild
 
+# Part 4 - Array Methods
+
+## .filter()
+## .every()
+## .includes()
+## .some()
+## .from() also w/ map
+## .of()
+## .forEach()
+## .copyWithin()
+## .fill()
+## .find()
+## .findIndex()
+
+# Part 5 - Object Methods
+
 ## Is
 
 ### Number.isNaN()
@@ -1040,92 +1109,18 @@ get(endpoints)
 >
 > Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 
-## Array
+## .assign()
 
-### .filter()
+## .values()
 
-### .every()
+## .keys()
 
-### .includes()
+## .entries()
 
-### .some()
-
-### .from() also w/ map
-
-### .of()
-
-### .forEach()
-
-### .copyWithin()
-
-### .fill()
-
-### .find()
-
-### .findIndex()
-
-## Object
-
-### .assign()
-
-### .values()
-
-### .keys()
-
-### .entries()
-
-### .freeze()
+## .freeze()
 
 > The Object.freeze() method freezes an object: that is, prevents new properties from being added to it; prevents existing properties from being removed; and prevents existing properties, or their enumerability, configurability, or writability, from being changed, it also prevents the prototype from being changed. The method returns the passed object.
 
-### .seal()
+## .seal()
 
 > The Object.seal() method seals an object, preventing new properties from being added to it and marking all existing properties as non-configurable. Values of present properties can still be changed as long as they are writable.
-
-## Immutability
-
-### JavaScript Primartives (Immutable)
-
-#### Number
-
-#### Boolean
-
-#### Etc
-
-### JavaScript Objects (Reference)
-
-#### Objects
-
-#### Arrays
-
-### Object.assign()
-
-## Meta-Programming
-
-> Metaprogramming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
->
-> https://en.wikipedia.org/wiki/Metaprogramming
-
-> Starting with ECMAScript 2015, JavaScript gains support for the Proxy and Reflect objects allowing you to intercept and define custom behavior for fundamental language operations (e.g. property lookup, assignment, enumeration, function invocation, etc). With the help of these two objects you are able to program at the meta level of JavaScript.
->
-> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Meta_programming
-
-### Reflect()
-
-#### .has(obj, 'propertyName')
-
-#### .ownKeys()
-
-#### .getPrototypeOf()
-
-### Proxy()
-
-#### Traps
-
-#### new Proxy(target, handler)
-
-#### handler
-
-##### .constsruct()
-
-##### .ownKeys()
