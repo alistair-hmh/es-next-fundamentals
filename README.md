@@ -2,7 +2,7 @@
 
 # ES Next Fundamentals
 
-> References notes for a short series of lectures on the latest ~JavaScript language features.
+> Reference notes for a short series of lectures on the latest ~JavaScript language features.
 
 -   **Strings:**
     Templates, Methods
@@ -28,10 +28,10 @@
 
 ## Identifiers
 
--   Const - A constant never changes it's primitive value.
--   Let - Let can be updated
--   Block scoped - invisible outside of the scope in which they were assigned.
--   Can't be re-assigned (referenced to another namespace)
+- **Const** - A constant never changes it's primitive value.
+- **Let** - Let can be updated
+- **Block scoped** - invisible outside of the scope in which they were assigned.
+- **Can't be re-assigned** (referenced to another name-space)
 
 ### const
 
@@ -70,10 +70,10 @@ Const and Var are both blocked scoped.
 	const a = 2
 }
 console.log(a)
-Uncaught ReferenceError: a is not defined
+// Uncaught ReferenceError: a is not defined
 ```
 
-You can assign to a namespace that is also used in the parent block.
+You can assign to a name-space that is also used in the parent block.
 
 ```js
 const a = 1
@@ -124,11 +124,16 @@ console.log(a)
 // 2
 ```
 
+### React 
+
+- Never use `var` in a react application.
+- Always use `const` and `let`.
+
 ## Strings
 
 ### String Templates
 
-#### Template Litarals
+#### Template Literals
 
 > Template literals are string literals allowing embedded expressions. You can use multi-line strings and string interpolation features with them. They were called "template strings" in prior editions of the ES2015 specification.
 
@@ -191,6 +196,33 @@ valid!
 // \nThis\nis\nvalid!
 ```
 
+#### ⚛ In React - String Templates Literals
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+
+const MyComp = (props) => (
+  <div>
+    <h1>Hello, {props.name}!</h1>
+    <h2>{`Hello, ${props.name}!`}</h2>
+  </div>
+)
+
+function App() {
+  return (
+    <div>
+      <MyComp name="World"/>
+    </div>
+  );
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```
+
+[CodeSandbox](https://codesandbox.io/s/7w7j33lr3j)
+
 ### String Methods
 
 #### .repeat()
@@ -248,6 +280,25 @@ const obj = {a, b, c}
 console.log(obj)
 // {a: "foo", b: "bar", c: "baz"}
 ```
+
+### ⚛ In React - Object Literal Shorthand
+
+```jsx
+  getData = () => {
+    const method = "GET";
+    const url = "https://jsonplaceholder.typicode.com/posts/1";
+    const obj = { url: url, method: method };
+
+    // Object Literal Shorthand
+    //     const method = "GET";
+    //     const url = "https://jsonplaceholder.typicode.com/posts/1";
+    //     const obj = { url, method };
+
+    fetchData(obj).then(data => this.setState({ data }));
+  };
+```
+
+[CodeSandBox](https://codesandbox.io/s/y0p0jp2o4v)
 
 ## Destructuring
 
@@ -335,6 +386,32 @@ const rotate = ([x, y, z]) => {
 const coords = [0, 1, 0]
 rotate(coords)
 ```
+
+
+### ⚛ In React - Object Destructuring
+
+```jsx
+const MyOldComponent = props => (
+  <div>
+    <p>
+      {props.a}, {props.b}, {props.c}
+    </p>
+  </div>
+);
+```
+
+```jsx
+const MyDestructuredComponent = ({ a, b, c }) => (
+  <div>
+    <p>
+      {a}, {b}, {c}
+    </p>
+  </div>
+);
+```
+
+[CodeSandbox](https://codesandbox.io/s/jlvpr20px9)
+
 
 ## Arrow Functions
 
@@ -426,6 +503,20 @@ getData('https://jsonplaceholder.typicode.com/posts/1').then(data =>
 	console.log(data)
 })()
 ```
+
+#### ⚛ In React - Arrow Functions
+
+```jsx
+const MyComponent = () => <div/>;
+```
+
+```jsx
+  doSomething = () => {
+    alert("Something!");
+  };
+```
+
+[CodeSandbox](https://codesandbox.io/s/qx9mxmm9qw)
 
 ### Lexical Context (this)
 
