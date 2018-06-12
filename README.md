@@ -8,7 +8,7 @@
     Templates, Methods
 -   **Functions:**
     Arrow Functions, Default Parameter Values, Spread & Rest Operators
--   **Object Oriented:**
+-   **Object-Oriented:**
     Prototypes, Classes, The Module Pattern, Lexical Context
 -   **Flow Control:**
     Promises, Async & Await, Generators & Iterators
@@ -422,7 +422,7 @@ const log = msg => {
 log('Hi!')
 ```
 
-#### Auto Return
+#### Automatic Return
 
 ```js
 const log = msg => console.log(msg)
@@ -518,32 +518,6 @@ const MyComponent = () => <div/>;
 
 [CodeSandbox](https://codesandbox.io/s/qx9mxmm9qw)
 
-### Lexical Context (this)
-
-```js
-const createDog = function dogClosure(name) {
-	const secret = 'I hate squirrels!'
-
-	const dog = {
-		name,
-
-		bark: () => {
-			// OOPS!
-			console.log(`Woof, my name is ${this.name}!`)
-		},
-
-		tellSecret: function() {
-			console.log(secret)
-		}
-	}
-
-	return dog
-}
-
-const buddy = createDog('Buddy')
-buddy.bark()
-// undefined
-```
 
 ## Default Parameter Values
 
@@ -655,7 +629,7 @@ console.log(output)
 // One 111 two 222 three 333!
 ```
 
-Demo: [Spread Teamplte Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
+Demo: [Spread Template Tags](https://codepen.io/F1LT3R/pen/JZKdob?editors=0012)
 
 ```jsx
 class Greeting extends React.Component {
@@ -666,7 +640,7 @@ class Greeting extends React.Component {
 }
 ```
 
-# Part 2 - Object Oriented Programming
+# Part 2 - Object-Oriented Programming
 
 ## Prototypes
 
@@ -711,18 +685,18 @@ Dog.prototype.bark = function() {
 	console.log(`Woof, my name is ${this.name}!`)
 }
 
-function SuperDog(name) {
+function FlyingDog(name) {
 	Dog.call(this, name)
 }
-SuperDog.prototype.fly = function() {
+FlyingDog.prototype.fly = function() {
 	console.log("I'm flying!")
 }
-SuperDog.prototype.constructor = Dog
-SuperDog.prototype = new Dog()
+FlyingDog.prototype.constructor = Dog
+FlyingDog.prototype = new Dog()
 
 
 const buddy = new Dog('Buddy')
-const bella = new SuperDog('Bella')
+const bella = new FlyingDog('Bella')
 buddy.bark()
 // Woof, my name is Buddy!
 bella.bark()
@@ -787,7 +761,7 @@ class Dog {
 	}
 }
 
-class SuperDog extends Dog {
+class FlyingDog extends Dog {
 	constructor(name) {
 		// Inheritance
 		super(name)
@@ -800,12 +774,22 @@ class SuperDog extends Dog {
 }
 
 const buddy = new Dog('Buddy')
-const bella = new SuperDog('Bella')
+const bella = new FlyingDog('Bella')
 buddy.bark()
 bella.bark()
 bella.fly()
 // buddy.fly()
 // TypeError: buddy.fly is not a function
+```
+
+#### ⚛ In React - Inheritance & Polymorphism
+
+```jsx
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
 ```
 
 ## Lexical Scope (this)
@@ -861,6 +845,21 @@ foo.log()
 // 123
 ```
 
+### ⚛ In React - Lexical Scope (this)
+
+Lexical scope is referenced in react components. React components are classes.
+
+```jsx
+class Welcome extends React.Component {
+	state = {
+		name: 'Alistair'
+	}
+	render() {
+		return <h1>Hello, {this.state.name}</h1>;
+	}
+}
+```
+
 ## Closures
 
 > “A closure is a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.”
@@ -912,27 +911,201 @@ buddy.tellSecret()
 
 ## Immutability
 
-https://www.youtube.com/watch?v=9M-r8p9ey8U
+What is "Immutability"?
 
-### JavaScript Primartives (Immutable)
+- Immutability is about being "Non-Destructive"
+- "Immutable" software means the original referenced value 1) does not change and 2 can not change.
+- Every time you update an object, you should receive a new copy of the original.
+	+ (The different between "Save" and "Save As")
 
-#### Number
+See Youtube Video: [ReactCasts #9 - Immutability in JavaScript](https://youtu.be/4LzcQyZ9JOU)
 
-#### Boolean
+- Why is immutability important?
+	+ Providing Stable State
+	+ Reduce/eliminate of unintended side-effects (functional programming)
+	+ Better data control
+	+ Replaying State at specific points (Time Travel)
+		* Tracking bugs, etc.
+	+ Undo/Redo implementations
+	+ Performance boosts with DOM Tree Diff'ing 
+	+ Parallelization (Multi Core)
 
-#### Etc
 
-### JavaScript Objects (Reference)
+### Idempotentcy
 
-#### Objects
+> An idempotent operation produces the result in the same state even if you call it more than once, provided you pass in the same parameters.
+>
+> [Source: Stack Overflow - What is an Idempotent Operation](https://stackoverflow.com/questions/1077412/what-is-an-idempotent-operation)
 
-#### Arrays
+### Unintended Side Effects
+
+```js
+function createPerson () {
+	let name
+	let age
+
+	const person = {
+		getName: () => {
+			return name
+		},
+		getAge: () => {
+			name = 'Bob'
+			return age
+		},
+		setName: function (newName) {
+			name = newName
+		},
+		setAge: function (newAge) {
+			age = newAge
+		}
+	}
+
+	return person
+}
+
+const person = createPerson()
+person.setName('Alistair')
+person.setAge(37)
+console.log(person)
+// {getAge: ƒ, updateName: ƒ, updateAge: ƒ, name: "Alistair", age: 37}
+
+console.log(`Name: ${person.getName()}, Age: ${person.getAge()}`)
+// Name: Alistair, Age: 37
+
+console.log(`Name: ${person.getName()}, Age: ${person.getAge()}`)
+// Name: Bob, Age: 37
+```
+
+### Languages with Immutability
+
+- JavaScript is not immutable by nature.
+- React is born in the immutable paradigm.
+
+- Immutable
+	+ Haskell (Purely functional)
+	+ Erlang
+	+ Scala
+	+ R	
+	+ Lisp
+		* Logo
+		* Scheme
+	+ ML
+		* Ocaml
+
+
+### Reference vs. Primitive Variables
+
+#### Primitives
+
+- Some types of JavaScript value are "Primitive".
+- When you assign primitive variables, the value gets copied in memory.
+
+```js
+const a = 'foo'
+console.log(a)  // foo
+
+const b = a
+console.log(b)  // foo
+
+b = 'bar'
+console.log(a)  // foo
+console.log(b)  // bar
+```
+
+**Primitive types include:**
+
+- Number
+- String
+- Boolean
+
+#### References
+
+ Some types of JavaScript value are "Referencial".
+- When you assign referencial variables, the reference to the memory location is passed into the variable.
+
+```js
+const a = {foo: 'bar'}
+console.log(a)  // {foo: "bar"}
+
+const b = a
+console.log(b)  // {foo: "bar"}
+
+b = {oh: 'what?!'}
+// Both values are now the same!
+// They have been pointed to the same reference in memory.
+console.log(a)  // {oh: 'what?!'}
+console.log(b)  // {oh: 'what?!'}
+```
+
+The object {foo: "bar"} is now orphaned, will be picked up my garbage collection and _should_ get deleted from memory on the next garbage cycle.
+
+**Referencial types include:**
+
+- Object
+- Array
+- Function
 
 ### Object.assign()
 
+Object `a` remains unchanged.
+
+```js
+const a = {foo: 'bar'}
+const b = Object.assign({}, a)
+console.log(b)  // {foo: "bar"}
+
+b.ping = 'pong'
+console.log(a)  // {foo: "bar"}
+console.log(b)  // {foo: "bar", ping: "pong"}
+```
+
+### Adding to an Array Immutably
+
+#### .concat()
+
+- Object `a` remains unchanged.
+
+```js
+const a = ['foo', 'bar', 'baz']
+console.log(a)  // ['foo', 'bar', 'baz']
+
+const b = a.concat('qux')
+console.log(b)  // ['foo', 'bar', 'baz', 'qux']
+```
+
+#### Spread
+
+- We can also use Spread
+- Object `a` remains unchanged.
+
+```js
+const a = ['foo', 'bar', 'baz']
+console.log(a)  // ['foo', 'bar', 'baz']
+
+const b = [...a, 'qux']
+console.log(b)  // ['foo', 'bar', 'baz', 'qux']
+```
+
+### Updating an Array Immutably
+
+### Array.filter()
+
+- Object `a` remains unchanged.
+
+```js
+const a = ['foo', 'bar', 'baz']
+console.log(a)  // ['foo', 'bar', 'baz']
+
+const b = a.filter(n => n !== 'bar' ? n : null)
+console.log(b)  // ['foo', 'baz']
+```
+
+[Immutability Challenge](https://codesandbox.io/s/mzy628nnjx)
+[Immutability Solution](https://codesandbox.io/s/6w6vm9my7r)
+
 ## Meta-Programming
 
-> Metaprogramming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
+> Meta-Programming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
 >
 > https://en.wikipedia.org/wiki/Metaprogramming
 
@@ -944,9 +1117,37 @@ https://www.youtube.com/watch?v=9M-r8p9ey8U
 
 #### .has(obj, 'propertyName')
 
+```js
+const foo = {a: 1, b: 2}
+
+const result = Reflect.has(foo, 'a')
+console.log(result)  // true
+```
+
 #### .ownKeys()
 
+```js
+const bar = {a: 1, b: 2}
+
+const keys = Reflect.ownKeys(bar)
+console.log(keys)  // ['a', 'b']
+```
+
+```js
+const baz = {a: 1, b: 2}
+
+Reflect.ownKeys(baz).map(key => {
+	baz[key] = "👊"
+})
+console.log(baz)  // {a: "👊", b: "👊"}
+```
+
 #### .getPrototypeOf()
+
+```js
+const qux = {a: 1, b: 2}
+
+```
 
 ### Proxy()
 
