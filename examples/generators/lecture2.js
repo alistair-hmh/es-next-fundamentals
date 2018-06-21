@@ -39,3 +39,4 @@ run(function *() {
 	const title = post.title
 	console.log('Title:', title)
 })
+

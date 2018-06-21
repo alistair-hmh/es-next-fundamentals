@@ -920,7 +920,8 @@ What is "Immutability"?
 
 See Youtube Video: [ReactCasts #9 - Immutability in JavaScript](https://youtu.be/4LzcQyZ9JOU)
 
-- Why is immutability important?
+- Why is immutability important? (in no particular order)
+	+ Re-usability
 	+ Providing Stable State
 	+ Reduce/eliminate of unintended side-effects (functional programming)
 	+ Better data control
@@ -1100,7 +1101,7 @@ const b = a.filter(n => n !== 'bar' ? n : null)
 console.log(b)  // ['foo', 'baz']
 ```
 
-[Immutability Challenge](https://codesandbox.io/s/mzy628nnjx)
+[Immutability Challenge #1](https://codesandbox.io/s/mzy628nnjx)
 [Immutability Solution](https://codesandbox.io/s/6w6vm9my7r)
 
 ## Meta-Programming
@@ -1142,26 +1143,195 @@ Reflect.ownKeys(baz).map(key => {
 console.log(baz)  // {a: "👊", b: "👊"}
 ```
 
-#### .getPrototypeOf()
+#### Object Extensibility and Sealing
 
 ```js
 const qux = {a: 1, b: 2}
+console.log(qux)  // {b: 2}
+console.log(Reflect.isExtensible(qux)) // false
 
+Reflect.set(qux, 'c', 3)
+console.log(qux)  // {b: 2}
+
+Reflect.preventExtensions(qux)
+console.log(Reflect.isExtensible(qux))  // false
+Reflect.set(qux, 'd', 4)
+// Nothing was added!
+console.log(qux)  // {a: 1, b: 2, c: 3}
+
+// Delete still works!
+console.log(Reflect.deleteProperty(qux, 'a'))  // true
+console.log(qux)
+
+// But seal stops delete too!
+Object.seal(qux)
+console.log(Reflect.deleteProperty(qux, 'b')) // false
+console.log(qux)
 ```
 
 ### Proxy()
 
 #### Traps
 
+> \[Traps are the\] methods that provide property access. This is analogous to the concept of traps in operating systems.
+>
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+
+- get()
+- set()
+- has()
+- ownKeys()
+- apply()
+- call()
+- construct()
+- ...etc.
+
 #### new Proxy(target, handler)
 
-#### handler
+```js
+const target = {foo: 'bar'};
 
-##### .constsruct()
+const handler = {
+	set: (target, prop, val) => {
+		target[prop] = val.replace('👻', '🎃')
+	}
+}
 
-##### .ownKeys()
+const proxy = new Proxy(target, handler);
+
+proxy.foo = 'BOO! 👻';
+
+console.log(target.foo);
+```
 
 ## Asynchronous Control Flow
+
+### Callbacks
+
+A simple callback:
+
+```js
+function addButNoHurry (a, b, callback) {
+	setTimeout(() => {
+		callback(a + b)
+	}, 1000)
+}
+
+const a = 2
+const b = 2
+
+addButNoHurry(a, b, function (result) {
+	console.log(result)
+}))
+```
+
+You could clean this up:
+
+```js
+function addButNoHurry (a, b, callback) {
+	setTimeout(() => {
+		callback(a + b)
+	}, 1000)
+}
+
+function callback (result) {
+	console.log(result)
+}
+
+var a = 2
+var b = 2
+
+addButNoHurry(a, b, callback)
+// But what if I need my result here...
+// 👇 ?
+// var result = addButNoHurry(a, b, callback)
+// console.log(result)
+```
+
+```js
+var result
+
+function addButNoHurry (a, b, callback) {
+	setTimeout(() => {
+		result = a + b
+	}, 1000)
+}
+
+var a = 2
+var b = 2
+
+addButNoHurry(a, b, callback)
+// 👇
+console.log(result)
+
+// - Talk about why nothing happens
+// - Talk about undesired-side-effects
+```
+
+#### Callback Soup
+
+- Callback Soup
+- Callback Hell
+- [Pyramid of Doom](https://en.wikipedia.org/wiki/Pyramid_of_doom_(programming))
+
+With callbacks:
+
+```js
+function getUserProfile (success, error) {
+	$.ajax.get('/user/profile', success, error)
+}
+
+function getUserTestResults (success, error) {
+	$.ajax.get('/user/results', success, error)
+}
+
+function getUserClasses (success, error) {
+	$.ajax.get('/user/classes', success, error)
+}
+
+function getUserDashBoardData () {
+	var profile
+	var results
+	var classes
+
+	getUserProfile(function (response) {
+		profile = JSON.stringify(response.data.profile)
+		getUserTestResults(function (response) {
+			results = JSON.stringify(response.data.results)
+			getUserClasses(function (response) {
+				classes = JSON.stringify(response.data.classes)
+
+				UserDashboard.show(profile, results, classes)				
+			}, function (err) {
+				ErrorModal.show('Could not load test results for user')
+			})
+		}, function (err) {
+			ErrorModal.show('Could not load test results for user')
+		})
+	}, function (err) {
+		ErrorModal.show('Could not load user profile')
+	})
+}
+```
+
+With promises:
+
+```js
+const getUserProfile = () => fetch('/user/profile')
+const getUserTestResults = () => fetch('/user/results')
+const getUserClasses = () => fetch('/user/classes')
+
+const getUserDashBoardData = () => {
+	Promises.all([
+		getUserProfile,
+		getUserTestResults,
+		getUserClasses
+	])
+	.then(responses => responses.map(response => response.json()))
+	.then(data => UserDashboard.show(...data))
+	.catch(err => ErrorModal.show(err.message))
+}
+```
 
 ### Promises
 
@@ -1303,6 +1473,9 @@ fetchOne(endpoints)
 // A different title is output each time
 ```
 
+[Challenge #2 - Creating a Promise](https://codesandbox.io/s/yp448460z1)
+
+
 ### Async & Await
 
 ```js
@@ -1317,7 +1490,6 @@ console.log(msg)
 ```
 
 ```js
-
 const fetchAll = endpoints => new Promise((resolve, reject) => {
 	const promises = []
 
@@ -1354,36 +1526,310 @@ const endpoints = [
 	'https://jsonplaceholder.typicode.com/posts/1',
 	'https://jsonplaceholder.typicode.com/posts/2',
 	'https://jsonplaceholder.typicode.com/posts/3',
-	'https://jsonplaceholder.typicode.com/poss/4',
+	'https://jsonplaceholder.typicode.com/posts/4',
 	'https://jsonplaceholder.typicode.com/posts/5'
 ]
 
 get(endpoints)
 ```
 
-### Generators
+[🌐 Challenge #3](https://codesandbox.io/s/7jr9nw5z21)
 
-#### Generator Functions
+## Generators
 
-#### Iterators
+```js
+function *() {}
+```
 
-#### next
+### yeild
 
-#### yeild
+```js
+// A Node.js helper library for generators
+const co = require('co')
+
+const delay = name => new Promise(resolve => {
+	const delay = Math.random() * 1000
+	setTimeout(() => resolve({name, delay}), delay)
+})
+
+co(function *() {
+	const foo = yield delay('foo')
+	console.log(foo)
+	const bar = yield delay('bar')
+	console.log(bar)
+	const baz = yield delay('baz')
+	console.log(baz)
+})
+```
+
+### Generator Functions, Iterators & Next
+
+- Generator Functions
+- Iterators
+- next
+
+```js
+const run = generator => {
+	const iterator = generator()
+	const iteration = iterator.next()
+
+	const iterate = iteration => {
+		if (iteration.done) {
+			return iteration.value
+		}
+
+		const promise = iteration.value
+		return promise.then(result => iterate(iterator.next(result)))
+	}
+
+	return iterate(iteration)
+}
+
+const delay = name => new Promise(resolve => {
+	const delay = Math.random() * 1000
+	setTimeout(() => resolve({name, delay}), delay)
+})
+
+run(function *() {
+	const foo = yield delay('foo')
+	console.log(foo)
+	const bar = yield delay('bar')
+	console.log(bar)
+	const baz = yield delay('baz')
+	console.log(baz)
+})
+```
 
 # Part 4 - Array Methods
 
-## .filter()
-## .every()
-## .includes()
-## .some()
-## .from() also w/ map
-## .of()
+For this section, we are going to walk through examples of the array method documentation from [Developer.Mozilla.org/JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
+
 ## .forEach()
-## .copyWithin()
-## .fill()
+
+
+[![Moz Docs](assets/moz.png) Array.ForEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+
+> ... executes a provided function once for each array element.
+
+```js
+var array1 = ['a', 'b', 'c'];
+
+array1.forEach(function(element) {
+  console.log(element);
+});
+```
+
+> There is no way to stop or break a forEach() loop other than by throwing an > exception. If you need such behavior, the forEach() method is the wrong tool.
+> 
+> Early termination may be accomplished with:
+> 
+> A simple loop, for...of loop, every(), some(), find(), findIndex()  
+
+### Challenge
+
+- [Challenge](https://codesandbox.io/s/lr8kp3qz8l)
+- [Solution](https://codesandbox.io/s/mj679ny3r8)
+
+## For...Of Loops
+
+[![Moz Docs](assets/moz.png) For...Of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)
+
+> ... creates a loop iterating over iterable objects for the value of each distinct property of the object. - Can itterative over Strings, Arrays, Array-like's, NodeList objects, TypedArrays, Maps, Sets and user-defined iterables.
+
+```js
+let iterable = [10, 20, 30];
+
+for (let value of iterable) {
+  value += 1;
+  console.log(value);
+}
+```
+
+## .filter()
+
+[![Moz Docs](assets/moz.png) Array.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+
+> ... creates a new array with all elements that pass the test implemented by the provided function.
+
+```js
+var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+
+const result = words.filter(word => word.length > 6);
+
+console.log(result);  // ["exuberant", "destruction", "present"]
+```
+
+- [Challenge](https://codesandbox.io/s/94qr4wzjw)
+- [Solution](https://codesandbox.io/s/kxyyl2j153)
+
+## .every()
+
+[![Moz Docs](assets/moz.png) Array.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
+
+> The every method executes the provided callback function once for each element present in the array until it finds one where callback returns a falsy value.
+
+```js
+function isBelowThreshold(currentValue) {
+  return currentValue < 40;
+}
+
+var array1 = [1, 30, 39, 29, 10, 13];
+
+console.log(array1.every(isBelowThreshold));  // true
+```
+
+- [Challenge](https://codesandbox.io/s/ov882yo9j9)
+- [Solution](https://codesandbox.io/s/52z3773yzp)
+
+## .some()
+
+[![Moz Docs](assets/moz.png) Array.some()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some)
+
+> ...tests whether at least one element in the array passes the test implemented by the provided function.
+
+> ...executes the callback function once for each element present in the array until it finds one where callback returns a truthy value.
+
+```js
+var array = [1, 2, 3, 4, 5];
+
+var even = function(element) {
+  // checks whether an element is even
+  return element % 2 === 0;
+};
+
+console.log(array.some(even));
+// expected output: true
+```
+
+## .includes()
+
+[![Moz Docs](assets/moz.png) Array.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes)
+
+> ...determines whether an array includes a certain element, returning true or false as appropriate. It uses the sameValueZero algorithm to determine whether the given element is found.
+
+```js
+var array1 = [1, 2, 3];
+
+console.log(array1.includes(2));
+// expected output: true
+
+var pets = ['cat', 'dog', 'bat'];
+
+console.log(pets.includes('cat'));
+// expected output: true
+
+console.log(pets.includes('at'));
+// expected output: false
+```
+
 ## .find()
+
+[![Moz Docs](assets/moz.png) Array.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find)
+
+> returns the value of the first element in the array that satisfies the provided testing function. Otherwise undefined is returned.
+
+```js
+var array1 = [5, 12, 8, 130, 44];
+
+var found = array1.find(function(element) {
+  return element > 10;
+});
+
+console.log(found);  // 12
+```
+
 ## .findIndex()
+
+[![Moz Docs](assets/moz.png) Array.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
+
+> ... returns the index of the first element in the array that satisfies the provided testing function. Otherwise -1 is returned.
+
+```js
+var array1 = [5, 12, 8, 130, 44];
+
+function findFirstLargeNumber(element) {
+  return element > 13;
+}
+
+console.log(array1.findIndex(findFirstLargeNumber));  // 3
+```
+
+## .of()
+
+[![Moz Docs](assets/moz.png) Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+
+> ... creates a new Array instance with a variable number of arguments, regardless of number or type of the arguments.
+
+```js
+const ary1 = Array.of(7)
+const ary2 = Array(7) 
+
+console.log(ary1)  // [7]
+console.log(ary2)  // [ , , , , , , ]
+```
+
+## .from()
+
+[![Moz Docs](assets/moz.png) Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+
+> ... creates a new, shallow-copied Array instance from an array-like or iterable object.
+
+```js
+const str = 'foo';
+const result = Array.from(str);
+console.log(Array.from(str))  // ["f", "o", "o"]
+```
+
+### .from() with .map()
+
+```js
+const ary = [4, 8, 16];
+
+const map = val => val * 2
+
+const result = Array.from(ary, map)
+
+console.log(result)  // ["f", "o", "o"]
+```
+
+## .fill()
+
+[![Moz Docs](assets/moz.png) Array.fill()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill)
+
+> ... fills all the elements of an array from a start index to an end index with a static value. The end index is not included.
+
+```js
+var array1 = [1, 2, 3, 4];
+
+// fill with 0 from position 2 until position 4
+console.log(array1.fill(0, 2, 4))  // [1, 2, 0, 0]
+
+// fill with 5 from position 1
+console.log(array1.fill(5, 1));  // [1, 5, 5, 5]
+
+console.log(array1.fill(6));  // [6, 6, 6, 6]
+```
+
+## .copyWithin()
+
+[![Moz Docs](assets/moz.png) Array.copyWithin()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin)
+
+> ... shallow copies part of an array to another location in the same array and returns it, without modifying its size.
+
+> arr.copyWithin(target)  
+> arr.copyWithin(target, start)  
+> arr.copyWithin(target, start, end)  
+
+```js
+var array1 = [1, 2, 3, 4, 5];
+
+// place at position 0 the element between position 3 and 4
+console.log(array1.copyWithin(0, 3, 4));  // [4, 2, 3, 4, 5]
+
+// place at position 1 the elements after position 3
+console.log(array1.copyWithin(1, 3));
+// expected output: Array [4, 4, 5, 4, 5]
+```
 
 # Part 5 - Object Methods
 
