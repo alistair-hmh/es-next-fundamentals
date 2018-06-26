@@ -918,7 +918,7 @@ What is "Immutability"?
 - Every time you update an object, you should receive a new copy of the original.
 	+ (The different between "Save" and "Save As")
 
-See Youtube Video: [ReactCasts #9 - Immutability in JavaScript](https://youtu.be/4LzcQyZ9JOU)
+See YouTube Video: [ReactCasts #9 - Immutability in JavaScript](https://youtu.be/4LzcQyZ9JOU)
 
 - Why is immutability important? (in no particular order)
 	+ Re-usability
@@ -1021,8 +1021,8 @@ console.log(b)  // bar
 
 #### References
 
- Some types of JavaScript value are "Referencial".
-- When you assign referencial variables, the reference to the memory location is passed into the variable.
+ Some types of JavaScript value are "Referential".
+- When you assign referential variables, the reference to the memory location is passed into the variable.
 
 ```js
 const a = {foo: 'bar'}
@@ -1040,7 +1040,7 @@ console.log(b)  // {oh: 'what?!'}
 
 The object {foo: "bar"} is now orphaned, will be picked up my garbage collection and _should_ get deleted from memory on the next garbage cycle.
 
-**Referencial types include:**
+**Referential types include:**
 
 - Object
 - Array
@@ -1103,106 +1103,6 @@ console.log(b)  // ['foo', 'baz']
 
 [Immutability Challenge #1](https://codesandbox.io/s/mzy628nnjx)
 [Immutability Solution](https://codesandbox.io/s/6w6vm9my7r)
-
-## Meta-Programming
-
-> Meta-Programming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
->
-> https://en.wikipedia.org/wiki/Metaprogramming
-
-> Starting with ECMAScript 2015, JavaScript gains support for the Proxy and Reflect objects allowing you to intercept and define custom behavior for fundamental language operations (e.g. property lookup, assignment, enumeration, function invocation, etc). With the help of these two objects you are able to program at the meta level of JavaScript.
->
-> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Meta_programming
-
-### Reflect()
-
-#### .has(obj, 'propertyName')
-
-```js
-const foo = {a: 1, b: 2}
-
-const result = Reflect.has(foo, 'a')
-console.log(result)  // true
-```
-
-#### .ownKeys()
-
-```js
-const bar = {a: 1, b: 2}
-
-const keys = Reflect.ownKeys(bar)
-console.log(keys)  // ['a', 'b']
-```
-
-```js
-const baz = {a: 1, b: 2}
-
-Reflect.ownKeys(baz).map(key => {
-	baz[key] = "👊"
-})
-console.log(baz)  // {a: "👊", b: "👊"}
-```
-
-#### Object Extensibility and Sealing
-
-```js
-const qux = {a: 1, b: 2}
-console.log(qux)  // {b: 2}
-console.log(Reflect.isExtensible(qux)) // false
-
-Reflect.set(qux, 'c', 3)
-console.log(qux)  // {b: 2}
-
-Reflect.preventExtensions(qux)
-console.log(Reflect.isExtensible(qux))  // false
-Reflect.set(qux, 'd', 4)
-// Nothing was added!
-console.log(qux)  // {a: 1, b: 2, c: 3}
-
-// Delete still works!
-console.log(Reflect.deleteProperty(qux, 'a'))  // true
-console.log(qux)
-
-// But seal stops delete too!
-Object.seal(qux)
-console.log(Reflect.deleteProperty(qux, 'b')) // false
-console.log(qux)
-```
-
-### Proxy()
-
-#### Traps
-
-> \[Traps are the\] methods that provide property access. This is analogous to the concept of traps in operating systems.
->
-> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-
-- get()
-- set()
-- has()
-- ownKeys()
-- apply()
-- call()
-- construct()
-- ...etc.
-
-#### new Proxy(target, handler)
-
-```js
-const target = {foo: 'bar'};
-
-const handler = {
-	set: (target, prop, val) => {
-		target[prop] = val.replace('👻', '🎃')
-	}
-}
-
-const proxy = new Proxy(target, handler);
-
-proxy.foo = 'BOO! 👻';
-
-console.log(target.foo);
-```
 
 ## Asynchronous Control Flow
 
@@ -1837,9 +1737,31 @@ console.log(array1.copyWithin(1, 3));
 
 ### Number.isNaN()
 
+```js
+const val = undefined + undefined
+console.log(val)  // NaN
+console.log(Number.isNaN(val))  // true
+```
+
 ### Array.isArray()
 
+```js
+const ary = []
+console.log(Array.isArray(ary))  // true
+const obj = {}
+console.log(Array.isArray(obj))  // false
+```
+
 ### Object.is()
+
+[![Moz Docs](assets/moz.png) Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
+
+> ... determines whether two values **are** the same value.
+
+```js
+console.log(123 === 123)  // true
+console.log(Object.is(123, 123))  // true
+```
 
 > This is not the same as being equal according to the == operator. The == operator applies various coercions to both sides (if they are not the same Type) before testing for equality (resulting in such behavior as "" == false being true), but Object.is doesn't coerce either value.
 >
@@ -1847,18 +1769,309 @@ console.log(array1.copyWithin(1, 3));
 >
 > Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 
+```js
+console.log(0 === -0)
+console.log(Object.is(0, -0))
+```
+
 ## .assign()
 
-## .values()
+[![Moz Docs](assets/moz.png) Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+
+> ... used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.
+
+```js
+const obj1 = {1: 'Hello,'}
+const obj2 = {2: 'world!'}
+const obj3 = Object.assign({}, obj1, obj2)
+console.log(obj3)  // {1: "Hello,", 2: "world!"}
+```
 
 ## .keys()
 
+```js
+var foo = {
+	a: 1,
+	b: 2,
+	c: 3
+}
+
+console.log(Object.keys(foo))  // ["a", "b", "c"]
+```
+
+## .values()
+
+[![Moz Docs](assets/moz.png) Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
+
+> ... returns an array of a given object's own enumerable property values, in the same order as that provided by a for...in loop (the difference being that a for-in loop enumerates properties in the prototype chain as well).
+
+```js
+var obj = {
+	2: 'A',
+	1: 'B',
+	0: 'C',
+}
+console.log(Object.values(obj))
+```
+
+## .keys()
+
+[![Moz Docs](assets/moz.png) Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+
+> ... returns an array of a given object's property names, in the same order as we get with a normal loop.
+
+```js
+var obj = {
+	a: 1,
+	b: 2,
+	c: 3
+}
+
+console.log(Object.keys(obj))  // ["a", "b", "c"] 
+```
+
 ## .entries()
+
+[![Moz Docs](assets/moz.png) Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+
+> ... returns an array of a given object's own enumerable property [key, value] pairs, in the same order as that provided by a for...in loop (the difference being that a for-in loop enumerates properties in the prototype chain as well).
+
+```js
+var obj = {
+	a: 1,
+	b: 2,
+	c: 3
+}
+
+console.log(Object.entries(obj))
+//	[
+//    ["a", 1],
+//    ["b", 2],
+//    ["c", 3] 
+//  ]
+```
+
+[Challenge 1](https://codesandbox.io/s/14xmyzpqy3)
+[Challenge 1 - Solution](https://codesandbox.io/s/mo49pk1j1y)
 
 ## .freeze()
 
+[![Moz Docs](assets/moz.png) Object.freeze()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+
 > The Object.freeze() method freezes an object: that is, prevents new properties from being added to it; prevents existing properties from being removed; and prevents existing properties, or their enumerability, configurability, or writability, from being changed, it also prevents the prototype from being changed. The method returns the passed object.
+
+```js
+const object1 = {
+  property1: 42
+};
+
+const object2 = Object.freeze(object1);
+
+object2.property1 = 33;
+```
+
+## .isFrozen()
+
+[![Moz Docs](assets/moz.png) Object.isFrozen()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen)
+
+> The Object.isFrozen() determines if an object is frozen.
+
+```js
+const object1 = {
+  property1: 42
+};
+
+console.log(Object.isFrozen(object1));
+// expected output: false
+
+Object.freeze(object1);
+
+console.log(Object.isFrozen(object1));
+```
 
 ## .seal()
 
-> The Object.seal() method seals an object, preventing new properties from being added to it and marking all existing properties as non-configurable. Values of present properties can still be changed as long as they are writable.
+[![Moz Docs](assets/moz.png) Object.seal()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
+
+> ...seals an object, preventing new properties from being added to it and marking all existing properties as non-configurable. Values of present properties can still be changed as long as they are writable.
+
+```js
+const object1 = {
+  property1: 42
+};
+
+Object.seal(object1);
+object1.property1 = 33;
+console.log(object1.property1);
+// expected output: 33
+
+delete object1.property1; // cannot delete when sealed
+console.log(object1.property1);
+// expected output: 33
+```
+
+## .isSealed()
+
+[![Moz Docs](assets/moz.png) Object.isSealed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed)
+
+> The Object.isSealed() method determines if an object is sealed.
+
+```js
+const object1 = {
+  property1: 42
+};
+
+console.log(Object.isSealed(object1));
+// expected output: false
+
+Object.seal(object1);
+
+console.log(Object.isSealed(object1));
+// expected output: true
+```
+
+## Meta-Programming
+
+> Meta-Programming is a programming technique in which computer programs have the ability to treat programs as their data. It means that a program can be designed to read, generate, analyse or transform other programs, and even modify itself while running. In some cases, this allows programmers to minimize the number of lines of code to express a solution, thus reducing the development time. It also allows programs greater flexibility to efficiently handle new situations without recompilation.
+>
+> https://en.wikipedia.org/wiki/Metaprogramming
+
+> Starting with ECMAScript 2015, JavaScript gains support for the Proxy and Reflect objects allowing you to intercept and define custom behavior for fundamental language operations (e.g. property lookup, assignment, enumeration, function invocation, etc). With the help of these two objects you are able to program at the meta level of JavaScript.
+>
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Meta_programming
+
+## Symbols
+
+[![Moz Docs](assets/moz.png) Symbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
+
+> The most common use of symbols by programmers is for performing language reflection (particularly for callbacks), and most common indirectly is their use to create object linkages.
+
+[Symbol Programming](https://en.wikipedia.org/wiki/Symbol_(programming))
+
+- Unique
+- Immutable
+- They are tokens to be used as unique ids
+- Symbol-keyed properties will be completely ignored when using JSON.stringify():
+
+```js
+var a = String('A')
+var b = String('A')
+console.log(a === b)  // true
+
+var a = Symbol('A')
+var b = Symbol('A')
+console.log(a === b)  // false
+```
+
+```js
+var foo = {
+	[Symbol('bar')]: 123
+}
+
+console.log(foo.bar)  // undefined
+
+console.log(Object.getOwnPropertySymbols(foo)[0])  // [Symbol(bar)]
+console.log(foo[Object.getOwnPropertySymbols(foo)[0]])  // 123
+
+console.log(foo[Reflect.ownKeys(foo)[0]])  // 123
+```
+
+```js
+var  myPrivateMethod  = Symbol();
+this[myPrivateMethod] = function() {...};
+```
+
+### Reflect()
+
+> In computer science, reflection is the ability of a computer program to examine, introspect, and modify its own structure and behavior at runtime.
+
+[Object Reflection Programming](https://en.wikipedia.org/wiki/Reflection_\(computer_programming\))
+
+#### .has(obj, 'propertyName')
+
+```js
+const foo = {a: 1, b: 2}
+
+const result = Reflect.has(foo, 'a')
+console.log(result)  // true
+```
+
+#### .ownKeys()
+
+```js
+const bar = {a: 1, b: 2}
+
+const keys = Reflect.ownKeys(bar)
+console.log(keys)  // ['a', 'b']
+```
+
+```js
+const baz = {a: 1, b: 2}
+
+Reflect.ownKeys(baz).map(key => {
+	baz[key] = "👊"
+})
+console.log(baz)  // {a: "👊", b: "👊"}
+```
+
+#### Object Extensibility and Sealing
+
+```js
+const qux = {a: 1, b: 2}
+console.log(qux)  // {b: 2}
+console.log(Reflect.isExtensible(qux)) // false
+
+Reflect.set(qux, 'c', 3)
+console.log(qux)  // {b: 2}
+
+Reflect.preventExtensions(qux)
+console.log(Reflect.isExtensible(qux))  // false
+Reflect.set(qux, 'd', 4)
+// Nothing was added!
+console.log(qux)  // {a: 1, b: 2, c: 3}
+
+// Delete still works!
+console.log(Reflect.deleteProperty(qux, 'a'))  // true
+console.log(qux)
+
+// But seal stops delete too!
+Object.seal(qux)
+console.log(Reflect.deleteProperty(qux, 'b')) // false
+console.log(qux)
+```
+
+### Proxy()
+
+#### Traps
+
+> \[Traps are the\] methods that provide property access. This is analogous to the concept of traps in operating systems.
+>
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+
+- get()
+- set()
+- has()
+- ownKeys()
+- apply()
+- call()
+- construct()
+- ...etc.
+
+#### new Proxy(target, handler)
+
+```js
+const target = {foo: 'bar'};
+
+const handler = {
+	set: (target, prop, val) => {
+		target[prop] = val.replace('👻', '🎃')
+	}
+}
+
+const proxy = new Proxy(target, handler);
+
+proxy.foo = 'BOO! 👻';
+
+console.log(target.foo);
+```
+
